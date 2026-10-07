@@ -1,0 +1,28 @@
+block
+    client["Whatsappp app"]:2
+    space:1
+    block:server:5
+        columns 5
+        apigateway["API gateway"]
+        space
+        loadbalancer["Load balancer"]
+        space
+        chatservice["Chat service"]
+
+        space:5
+
+        space
+        kafka["Kafka"]:4
+
+        space:5
+
+        notficationservice
+        space
+
+        space:5
+
+        database[("Database")]
+    end
+    client-->apigateway
+    apigateway-->loadbalancer
+    loadbalancer-->chatservice
