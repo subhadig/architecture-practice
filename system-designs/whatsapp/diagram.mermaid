@@ -1,28 +1,47 @@
+---
+config:
+  layout: elk
+  look: handDrawn
+  theme: dark
+---
 block
-    client["Whatsappp app"]:2
-    space:1
-    block:server:5
-        columns 5
-        apigateway["API gateway"]
+    columns 3
+    
+    client["Whatsappp app"]
+    
+    space
+    block:server:3
+        columns 1
+        block
+            columns 7
+            apigateway["API gateway"]
+            space
+            loadbalancer["Load balancer"]
+            space
+            chatservice["Chat service"]
+            space
+            notficationservice["Notification Service"]
+        end
+
         space
-        loadbalancer["Load balancer"]
+        
+        kafka["Kafka"]
+        
         space
-        chatservice["Chat service"]
-
-        space:5
-
-        space
-        kafka["Kafka"]:4
-
-        space:5
-
-        notficationservice
-        space
-
-        space:5
 
         database[("Database")]
     end
+    space:3
+    
+    space:2
+    pushserver["Android push notification server"]
+
     client-->apigateway
     apigateway-->loadbalancer
     loadbalancer-->chatservice
+    chatservice-->kafka
+    chatservice-->database
+    kafka-->notficationservice
+    notficationservice-->pushserver
+    notficationservice-- "Websocket" -->client
+    pushserver -- "Push notification" -->client
