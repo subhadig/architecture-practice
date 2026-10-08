@@ -1,0 +1,19 @@
+flowchart TB
+    client["Whatsappp app"]
+    subgraph server
+        apigateway["API Gateway"]
+        loadbalancer["Load Balancer"]
+        chatservice["Chat Service"]
+        kafka["Kafka"]
+        database[("Database")]
+        notficationservice["Notification Service"]
+    end
+    pushserver["Android push server"]
+
+    client-- New message -->apigateway
+    apigateway-->loadbalancer-->chatservice
+    chatservice-->kafka & database
+    kafka-->notficationservice
+    notficationservice-. Websocket .->client
+    notficationservice-->pushserver
+    pushserver-. Push Notification .->client
