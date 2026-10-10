@@ -4,22 +4,24 @@ config:
 ---
 flowchart TB
     client["Whatsappp app"]
-    subgraph server
-        apigateway["API Gateway"]
-        loadbalancer["Load Balancer"]
-        chatservice["Chat Service"]
-        kafka["Kafka"]
-        database[("Database")]
-        notficationservice["Notification Service"]
+    subgraph Backend Layer
+        subgraph Whatsapp Server
+            apigateway["API Gateway"]
+            loadbalancer["Load Balancer"]
+            chatservice["Chat Service"]
+            kafka["Kafka"]
+            database[("Database")]
+            notficationservice["Notification Service"]
+        end
+        pushserver["Android Push Notification Server"]
     end
-    pushserver["Android Push Notification Server"]
     
-    pushserver-. Push Notification .->client
     client-- New message -->apigateway
     notficationservice-- Websocket(Client open) -->client
-
+    
     apigateway-->loadbalancer-->chatservice
     chatservice-->kafka & database
     kafka-.->notficationservice
     
     notficationservice-- When client is closed -->pushserver
+    pushserver-. Push Notification .->client
