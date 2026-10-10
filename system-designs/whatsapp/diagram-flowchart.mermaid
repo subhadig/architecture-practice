@@ -1,9 +1,8 @@
 ---
 config:
   theme: redux-dark-color
-  layout: dagre
 ---
-flowchart LR
+flowchart TB
     client["Whatsappp app"]
     subgraph server
         apigateway["API Gateway"]
@@ -13,12 +12,14 @@ flowchart LR
         database[("Database")]
         notficationservice["Notification Service"]
     end
-    pushserver["Android push server"]
-
+    pushserver["Android Push Notification Server"]
+    
+    pushserver-. Push Notification .->client
     client-- New message -->apigateway
+    notficationservice-- Websocket(Client open) -->client
+
     apigateway-->loadbalancer-->chatservice
     chatservice-->kafka & database
-    kafka-->notficationservice
-    notficationservice-. Websocket .->client
-    notficationservice-->pushserver
-    pushserver-. Push Notification .->client
+    kafka-.->notficationservice
+    
+    notficationservice-- When client is closed -->pushserver
